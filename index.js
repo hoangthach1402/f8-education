@@ -3,15 +3,24 @@ const app = express()
 const port = 3000
 const handlebars = require('express-handlebars')
 const path = require('path')
+const route = require('./src/routes/index')
 
-app.use(express.static(path.join(__dirname, 'src/public')))
+const db = require('./src/config/db')
+db.connect()
+
+app.use(express.static(path.join(__dirname, 'src', 'public')))
 
 // Template Engine
 app.engine('handlebars', handlebars())
 app.set('view engine', 'handlebars')
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+)
+app.use(express.json())
 
-app.get('/', function (req, res) {
-  res.render('home')
-})
+// route init
+route(app)
 
 app.listen(port, () => console.log('Server is running '))
