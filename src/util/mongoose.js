@@ -6,4 +6,3 @@ module.exports = {
     return mongoose ? mongoose.toObject() : mongoose
   },
 }
-

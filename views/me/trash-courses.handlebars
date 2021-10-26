@@ -1,0 +1,95 @@
+<div class="mt-4">
+    <h3>khoa hoc da xoa</h3>
+    <a href="/me/stored/courses">Danh sach khoa hoc</a>
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Ten khoa hoc</th>
+      <th scope="col">Trinh do</th>
+      <th scope="col">Thoi gian tao</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {{#each courses}}
+    <tr>
+      <th scope="row">{{sum @index 1}}</th>
+      <td>{{this.name}}</td>
+      <td>{{this.level}}</td>
+      <td>{{this.createdAt}}</td>
+      <td>
+          <a class="btn btn-link btn-restore" href="" data-id="{{this._id}}">Khoi phuc</a>
+          <a href="" class="btn btn-link" data-id="{{this._id}}" data-bs-toggle="modal" data-bs-target="#delete-course-modal" >Xoa Vinh Vien</button>
+      </td>
+
+      
+    </tr>
+    {{else}}
+    <tr>
+        <td colspan="5" class="text-center">
+         Thung rac trong
+            <a href="/me/stored/courses">Danh sach khoa hoc</a>
+        </td>
+    </tr>    
+  {{/each}}
+  </tbody>
+</table>
+</div>
+
+{{!-- confirm delete  course--}}
+
+<div class="modal" tabindex="-1" id="delete-course-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Xoa Khoa hoc?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are You Sure to Delete this Course? </p>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-delete-course" type="button"  class="btn btn-danger">Xoa bo</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<form method="post" name="delete-course-form">
+</form>
+<form method="post" name="restore-course-form">
+</form>
+
+
+<script>
+ document.addEventListener('DOMContentLoaded',function(){
+
+ var deleteForm = document.forms['delete-course-form']   
+ var restoreForm = document.forms['restore-course-form']   
+ var courseId ;
+ var exampleModal = document.getElementById('delete-course-modal')
+var restoreBtn = $('.btn-restore')
+
+exampleModal.addEventListener('show.bs.modal', function (event) {
+  var button = event.relatedTarget
+  courseId= button.getAttribute('data-id')
+  
+})
+var btnDeleteCourse = document.getElementById('btn-delete-course');
+  btnDeleteCourse.onclick= function(){
+    deleteForm.action='/courses/'+courseId+'/force?_method=POST';
+    deleteForm.submit() ;
+ }
+    restoreBtn.click(function(e){
+        e.preventDefault();    
+        var courseId = $(this).data('id')    
+    restoreForm.action='/courses/'+courseId+'/restore?_method=POST';
+        restoreForm.submit();
+    })
+
+ })
+
+</script>
